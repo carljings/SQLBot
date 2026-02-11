@@ -5,7 +5,8 @@
     "Data Connections": "数据源",
     "Dashboard": "仪表盘",
     "AI Model Configuration": "模型配置",
-    "Details": "详情"
+    "Details": "详情",
+    "dimension.dimension_management": "维度值管理"
   },
   "sync": {
     "integration": "需开启平台对接",
@@ -932,5 +933,33 @@
     "create": "创建",
     "to_doc": "查看 API",
     "trigger_limit": "最多支持创建 {0} 个 API Key"
+  },
+  "dimension": {
+    "dimension_management": "维度值管理",
+    "add_dimension": "添加维度值",
+    "edit_dimension": "编辑维度值",
+    "dimension_name": "维度名称",
+    "dimension_code": "维度编码",
+    "description": "描述",
+    "values": "维度值",
+    "value_count": "值数量",
+    "value": "值",
+    "add_value": "添加值",
+    "remove": "移除",
+    "name_required": "请输入维度名称",
+    "code_required": "请输入维度编码",
+    "code_hint": "英文标识，用于系统内部标识，建议使用驼峰命名",
+    "name_placeholder": "例如：订单状态",
+    "code_placeholder": "例如：orderStatus",
+    "description_placeholder": "例如：订单的各种状态",
+    "values_required": "请至少添加一个维度值",
+    "delete_confirm": "确定要删除该维度值吗？",
+    "search_placeholder": "搜索维度名称或编码",
+    "empty_description": "暂无维度值，点击上方按钮添加",
+    "select_dimension": "选择维度值",
+    "no_dimension": "不选择维度值",
+    "dimension_linked": "已关联维度值",
+    "link_dimension": "关联维度值",
+    "unlink_dimension": "取消关联"
   }
 }

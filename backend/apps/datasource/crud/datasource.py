@@ -24,6 +24,7 @@ from ..crud.field import delete_field_by_ds_id, update_field
 from ..crud.table import delete_table_by_ds_id, update_table
 from ..models.datasource import CoreDatasource, CreateDatasource, CoreTable, CoreField, ColumnSchema, TableObj, \
     DatasourceConf, TableAndFields
+from apps.dimension.models.dimension_model import DimensionValue
 
 
 def get_datasource_list(session: SessionDep, user: CurrentUser, oid: Optional[int] = None) -> List[CoreDatasource]:
@@ -408,6 +409,19 @@ def get_table_obj_by_ds(session: SessionDep, current_user: CurrentUser, ds: Core
     table_ids = [table.id for table in tables]
     all_fields = session.query(CoreField).filter(
         and_(CoreField.table_id.in_(table_ids), CoreField.checked == True)).all()
+
+    # 获取所有维度值，按ID组织
+    dimension_ids = [f.dimension_id for f in all_fields if f.dimension_id is not None]
+    dimensions = {}
+    if dimension_ids:
+        dimension_records = session.query(DimensionValue).filter(DimensionValue.id.in_(dimension_ids)).all()
+        for dim in dimension_records:
+            dimensions[dim.id] = dim
+
+    # 为每个字段附加维度值信息
+    for field in all_fields:
+        field.dimension = dimensions.get(field.dimension_id) if field.dimension_id else None
+
     # build dict
     fields_dict = {}
     for field in all_fields:
@@ -459,10 +473,19 @@ def get_table_schema(session: SessionDep, current_user: CurrentUser, ds: CoreDat
                 field_comment = ''
                 if field.custom_comment:
                     field_comment = field.custom_comment.strip()
-                if field_comment == '':
-                    field_list.append(f"({field.field_name}:{field.field_type})")
-                else:
-                    field_list.append(f"({field.field_name}:{field.field_type}, {field_comment})")
+
+                # 构建字段定义
+                field_def = f"({field.field_name}:{field.field_type}"
+                if field_comment != '':
+                    field_def += f", {field_comment}"
+
+                # 如果字段有关联的维度值，添加 examples 字段
+                if hasattr(field, 'dimension') and field.dimension and field.dimension.values:
+                    examples_str = json.dumps(field.dimension.values[:10], ensure_ascii=False)  # 最多显示10个值
+                    field_def += f", examples:{examples_str}"
+
+                field_def += ")"
+                field_list.append(field_def)
             schema_table += ",\n".join(field_list)
         schema_table += '\n]\n'
 

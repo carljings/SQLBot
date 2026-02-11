@@ -189,3 +189,7 @@ test.py
 
 
 !/.venv/
+
+# Large files
+models/
+tools/db-scripts/*.db

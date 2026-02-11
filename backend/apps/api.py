@@ -4,6 +4,7 @@ from apps.chat.api import chat
 from apps.dashboard.api import dashboard_api
 from apps.data_training.api import data_training
 from apps.datasource.api import datasource, table_relation, recommended_problem
+from apps.dimension.api import router as dimension
 from apps.mcp import mcp
 from apps.system.api import login, user, aimodel, workspace, assistant, parameter, apikey, variable_api
 from apps.terminology.api import terminology
@@ -31,5 +32,7 @@ api_router.include_router(apikey.router)
 api_router.include_router(recommended_problem.router)
 
 api_router.include_router(variable_api.router)
+
+api_router.include_router(dimension)
 
 #api_router.include_router(audit_api.router)

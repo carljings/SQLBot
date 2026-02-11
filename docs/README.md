@@ -1,171 +1,107 @@
-# SQLBot双方案切换设计文档
+# SQLBot 文档中心
 
-## 📁 文档说明
+## 目录结构
 
-本目录包含SQLBot双方案切换（LLM方案 + Claude Code方案）的完整设计文档。
+```
+docs/
+├── README.md                          # 本文件
+├── roadmap.md                         # 产品迭代路书（含 Phase 0 召回优化方案）
+│
+├── architecture/                      # 架构设计文档
+│   ├── SQLBot-Current-Architecture-Design.md  # 当前系统架构详细设计 ⭐
+│   ├── claude-code-architecture-v*.md # Claude Code 架构设计（版本迭代）
+│   ├── claude-code-data-flow.md       # 数据流设计
+│   ├── dual-mode-architecture.md      # 双模式架构设计
+│   ├── solution-b-detailed-impl.md    # 路线 B 详细实现方案
+│   └── sqlbot-vs-claude-code-comparison.md  # 方案对比分析
+│
+├── switch-design/                     # 双方案切换设计文档
+│   ├── SQLBot-SWITCH-DETAILED-DESIGN.md  # 详细设计文档（最终版）⭐
+│   └── versions/                      # 历史版本文档
+│       ├── SQLBot-SWITCH-DESIGN.md    # V1 版本
+│       ├── SQLBot-SWITCH-DESIGN-V2.md # V2 版本
+│       ├── SQLBot-SWITCH-DESIGN-V3.md # V3 版本
+│       ├── SQLBot-SWITCH-DESIGN-V4.md # V4 版本
+│       └── SQLBot-SWITCH-DESIGN-V5.md # V5 版本
+│
+├── project-analysis/                  # 项目分析文档
+│   ├── szy-epoint-aichat-analysis.md  # Epoint AIChat 分析
+│   ├── sz-ybz-agent-architecture.md   # 一本账 Agent 架构
+│   └── sz-ybz-claude-code-architecture.md  # 一本账 Claude Code 架构
+│
+└── technical/                         # 技术文档
+    ├── backend-language-comparison.md # 后端语言对比
+    ├── text2sql-flowchart.md          # Text-to-SQL 流程图
+    ├── text2sql-projects-comparison.md # Text-to-SQL 项目对比
+    └── rag-recall-order-optimization.md # RAG 召回顺序优化
+```
 
----
+## 快速导航
 
-## 📚 文档分类
+### 产品规划
 
-### 🎯 推荐文档（最终版本）
+- 📋 **[产品迭代路书](./roadmap.md)** - 完整的产品迭代规划
+  - Phase 0: 召回顺序与关联优化（短期高优先级）
+  - Phase 1-3: RAG 检索优化路线
+  - 路线 B: 双方案切换设计
 
-- **[SQLBot-SWITCH-DETAILED-DESIGN.md](./SQLBot-SWITCH-DETAILED-DESIGN.md)** ⭐
-  - 版本：V6.0
-  - 状态：最终版
-  - 内容：完整详细设计，包含实施方案、测试方案、回滚方案
-  - 推荐指数：⭐⭐⭐⭐⭐
+### 架构设计
 
----
+- 📘 **[当前系统架构设计](./architecture/SQLBot-Current-Architecture-Design.md)** - SQLBot 系统代码架构详细设计 ⭐
+- 🏗️ **[双模式架构设计](./architecture/dual-mode-architecture.md)** - LLM 方案与 Claude Code 方案的双模式架构
+- 📊 **[Claude Code 数据流](./architecture/claude-code-data-flow.md)** - Claude Code 方案的数据流设计
+- 🔄 **[路线 B 详细实现](./architecture/solution-b-detailed-implementation.md)** - 路线 B 的详细实现方案
+- ⚖️ **[方案对比分析](./architecture/sqlbot-vs-claude-code-comparison.md)** - SQLBot vs Claude Code 方案对比
 
-### 📖 SQLBot双方案切换系列（V1-V6）
+### 双方案切换设计
 
-这些文档是SQLBot项目的双方案切换设计演进历程。
+- ⭐ **[详细设计文档](./switch-design/SQLBot-SWITCH-DETAILED-DESIGN.md)** - 最终版本，推荐使用
+- 📜 **[历史版本](./switch-design/versions/)** - V1 到 V5 的完整演进历史
 
-| 版本 | 文件 | 时间 | 核心改进 | 推荐指数 |
-|------|------|------|----------|----------|
-| V1 | [SQLBot-SWITCH-DESIGN.md](./SQLBot-SWITCH-DESIGN.md) | 09:57 | 基础双方案切换 | ⭐⭐⭐ |
-| V2 | [SQLBot-SWITCH-DESIGN-V2.md](./SQLBot-SWITCH-DESIGN-V2.md) | 10:05 | 按SQLBot架构模式设计 | ⭐⭐⭐⭐ |
-| V3 | [SQLBot-SWITCH-DESIGN-V3.md](./SQLBot-SWITCH-DESIGN-V3.md) | 10:18 | 增加RAG检索切换 | ⭐⭐⭐⭐ |
-| V4 | [SQLBot-SWITCH-DESIGN-V4.md](./SQLBot-SWITCH-DESIGN-V4.md) | 10:25 | 职责明确 | ⭐⭐⭐⭐⭐ |
-| V5 | [SQLBot-SWITCH-DESIGN-V5.md](./SQLBot-SWITCH-DESIGN-V5.md) | 10:34 | 三端职责明确 | ⭐⭐⭐⭐⭐ |
-| V6 | [SQLBot-SWITCH-DETAILED-DESIGN.md](./SQLBot-SWITCH-DETAILED-DESIGN.md) | 10:41 | 详细设计（最终版） | ⭐⭐⭐⭐⭐ |
+### 项目分析
 
----
+- 🏢 **[Epoint AIChat 分析](./project-analysis/szy-epoint-aichat-analysis.md)** - Epoint AIChat 系统分析
+- 📔 **[一本账 Agent 架构](./project-analysis/sz-ybz-agent-architecture.md)** - 江苏省一本账项目 Agent 架构
+- 🤖 **[一本账 Claude Code 架构](./project-analysis/sz-ybz-claude-code-architecture.md)** - 一本账项目的 Claude Code 集成架构
 
-### 🏗️ 早期架构设计
+### 技术文档
 
-这些文档是早期讨论Claude Code架构时的设计方案。
+- 🔧 **[RAG 召回顺序优化](./technical/rag-recall-order-optimization.md)** - 召回策略优化方案
+- 📐 **[Text-to-SQL 流程图](./technical/text2sql-flowchart.md)** - Text-to-SQL 处理流程详解
+- 🌐 **[后端语言对比](./technical/backend-language-comparison.md)** - 后端技术选型分析
+- 📚 **[Text-to-SQL 项目对比](./technical/text2sql-projects-comparison.md)** - 开源项目对比分析
 
-| 文件 | 说明 | 大小 |
-|------|------|------|
-| [claude-code-architecture-v2.md](./claude-code-architecture-v2.md) | Claude Code架构设计V2 | 23K |
-| [claude-code-architecture-v3.md](./claude-code-architecture-v3.md) | Claude Code架构设计V3 | 27K |
-| [claude-code-architecture-v5.md](./claude-code-architecture-v5.md) | Claude Code架构设计V5 | 19K |
-| [claude-code-architecture-v6.md](./claude-code-architecture-v6.md) | Claude Code架构设计V6 | 21K |
+## 文档版本历史
 
----
+| 版本 | 日期 | 变更内容 |
+|-----|------|----------|
+| v1.0 | 2026-02-09 | 初始版本，创建基础文档结构 |
+| v1.1 | 2026-02-11 | 添加 Phase 0 召回优化方案 |
+| v1.2 | 2026-02-11 | **文档重组**: 整理文档目录结构，分类归档 |
+| v1.3 | 2026-02-11 | 添加当前系统架构详细设计文档 |
 
-### 📊 数据流和对比分析
+## 文档规范
 
-| 文件 | 说明 | 大小 |
-|------|------|------|
-| [claude-code-data-flow.md](./claude-code-data-flow.md) | Claude Code数据流设计 | 18K |
-| [dual-mode-architecture.md](./dual-mode-architecture.md) | 双模式架构设计 | 23K |
-| [sqlbot-vs-claude-code-comparison.md](./sqlbot-vs-claude-code-comparison.md) | SQLBot vs Claude Code对比 | 13K |
-| [text2sql-projects-comparison.md](./text2sql-projects-comparison.md) | Text2SQL项目对比 | 11K |
+### 新增文档
 
----
+1. **架构文档** → 放入 `architecture/` 目录
+2. **设计文档** → 放入 `switch-design/` 目录
+3. **项目分析** → 放入 `project-analysis/` 目录
+4. **技术文档** → 放入 `technical/` 目录
 
-### 🔧 项目相关文档
+### 版本迭代
 
-| 文件 | 说明 | 大小 |
-|------|------|------|
-| [solution-b-detailed-implementation.md](./solution-b-detailed-implementation.md) | 方案B详细实施方案 | 30K |
-| [sz-ybz-agent-architecture.md](./sz-ybz-agent-architecture.md) | 苏政源Agent架构 | 21K |
-| [sz-ybz-claude-code-architecture.md](./sz-ybz-claude-code-architecture.md) | 苏政源Claude Code架构 | 19K |
+- 对于有版本迭代的文档，在对应目录下创建 `versions/` 子目录
+- 保留历史版本以便追踪演进过程
+- 最新稳定版本放在目录根目录
 
----
+### 命名规范
 
-## 📋 最终方案概述
-
-### 方案名称
-
-**SQLBot双方案切换（Claude Code方案 + LLM方案）**
-
-### 三端职责
-
-| 端 | 职责 |
-|----|------|
-| **Claude Code** | 读取MD文件 + 生成SQL |
-| **SQLBot后端** | 执行SQL + 生成图表 + 返回结果 |
-| **前端** | 展示SQL、数据、图表 |
-
-### 核心优势
-
-- ✅ 三端职责明确
-- ✅ 零表结构变更
-- ✅ 保持代码风格
-- ✅ 向后兼容
-- ✅ 平滑切换
-- ✅ 最小改动
-- ✅ 前端无需改动
-- ✅ 自动降级
-- ✅ 复用现有逻辑
-
----
-
-## 🎯 实施方式
-
-### 当前仓库
-
-- **仓库地址**：https://github.com/carljings/SQLBot.git
-- **本地位置**：`/Users/guchuan/codespace/SQLBot-ClaudeCode`
-- **当前分支**：`feature/claude-code-solution`
-
-### 实施步骤
-
-按照 [SQLBot-SWITCH-DETAILED-DESIGN.md](./SQLBot-SWITCH-DETAILED-DESIGN.md) 中的详细设计执行：
-
-1. **Phase 1**: 功能开关模块（2-3小时）
-2. **Phase 2**: Claude Code客户端（3-4小时）
-3. **Phase 3**: Claude Code方案任务（2-3小时）
-4. **Phase 4**: 策略工厂（2-3小时）
-5. **Phase 5**: API改造（2-3小时）
-6. **Phase 6**: 测试和优化（2-3小时）
-
-**总计**：13-19小时
+- 使用小写字母和连字符：`document-name.md`
+- 版本号格式：`document-name-vN.md` (N 为版本号)
+- 最终版本去掉版本号：`document-name.md`
 
 ---
 
-## 🔗 快速链接
-
-### 推荐阅读
-
-- 🎯 **[详细设计文档（V6）](./SQLBot-SWITCH-DETAILED-DESIGN.md)** - 最终版，推荐使用
-
-### 方案演进
-
-- [方案V1](./SQLBot-SWITCH-DESIGN.md) - 初版设计
-- [方案V2](./SQLBot-SWITCH-DESIGN-V2.md) - 按SQLBot架构模式设计
-- [方案V3](./SQLBot-SWITCH-DESIGN-V3.md) - 增加RAG检索切换
-- [方案V4](./SQLBot-SWITCH-DESIGN-V4.md) - 职责明确版
-- [方案V5](./SQLBot-SWITCH-DESIGN-V5.md) - 三端职责明确版
-
-### 早期设计
-
-- [Claude Code架构V2](./claude-code-architecture-v2.md)
-- [Claude Code架构V3](./claude-code-architecture-v3.md)
-- [Claude Code架构V5](./claude-code-architecture-v5.md)
-- [Claude Code架构V6](./claude-code-architecture-v6.md)
-
-### 对比分析
-
-- [Claude Code数据流](./claude-code-data-flow.md)
-- [双模式架构](./dual-mode-architecture.md)
-- [SQLBot vs Claude Code对比](./sqlbot-vs-claude-code-comparison.md)
-- [Text2SQL项目对比](./text2sql-projects-comparison.md)
-
----
-
-## 📊 方案演进总结
-
-| 阶段 | 文件 | 核心改进 | 推荐指数 |
-|------|------|----------|----------|
-| **SQLBot双方案切换（V1-V6）** |
-| V1 | SQLBot-SWITCH-DESIGN.md | 基础双方案切换 | ⭐⭐⭐ |
-| V2 | SQLBot-SWITCH-DESIGN-V2.md | 按SQLBot架构模式设计 | ⭐⭐⭐⭐ |
-| V3 | SQLBot-SWITCH-DESIGN-V3.md | 增加RAG检索切换 | ⭐⭐⭐⭐ |
-| V4 | SQLBot-SWITCH-DESIGN-V4.md | 职责明确 | ⭐⭐⭐⭐⭐ |
-| V5 | SQLBot-SWITCH-DESIGN-V5.md | 三端职责明确 | ⭐⭐⭐⭐⭐ |
-| V6 | SQLBot-SWITCH-DETAILED-DESIGN.md | 详细设计（最终版） | ⭐⭐⭐⭐⭐ |
-| **早期架构设计** |
-| V2 | claude-code-architecture-v2.md | Claude Code架构设计 | ⭐⭐⭐ |
-| V3 | claude-code-architecture-v3.md | 架构优化 | ⭐⭐⭐⭐ |
-| V5 | claude-code-architecture-v5.md | 职责划分 | ⭐⭐⭐⭐ |
-| V6 | claude-code-architecture-v6.md | 三端职责明确 | ⭐⭐⭐⭐⭐ |
-
----
-
-**最后更新**：2026-02-09
-**作者**：CodeCraft
+**最后更新**：2026-02-11
+**维护者**：SQLBot Team

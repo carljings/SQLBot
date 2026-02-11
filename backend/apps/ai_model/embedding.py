@@ -17,9 +17,9 @@ class EmbeddingModelInfo(BaseModel):
     device: str = 'cpu'
 
 
+# 使用 HuggingFace 在线模型名称（会自动下载到 cache_folder）
 local_embedding_model = EmbeddingModelInfo(folder=settings.LOCAL_MODEL_PATH,
-                                           name=os.path.join(settings.LOCAL_MODEL_PATH, 'embedding',
-                                                             "shibing624_text2vec-base-chinese"))
+                                           name=settings.DEFAULT_EMBEDDING_MODEL)
 
 _lock = threading.Lock()
 locks = {}

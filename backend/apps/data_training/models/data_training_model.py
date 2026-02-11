@@ -4,6 +4,7 @@ from typing import List, Optional
 from pgvector.sqlalchemy import VECTOR
 from pydantic import BaseModel
 from sqlalchemy import Column, Text, BigInteger, DateTime, Identity, Boolean
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlmodel import SQLModel, Field
 
 
@@ -19,6 +20,9 @@ class DataTraining(SQLModel, table=True):
     enabled: Optional[bool] = Field(sa_column=Column(Boolean, default=True))
     advanced_application: Optional[int] = Field(sa_column=Column(BigInteger, nullable=True))
 
+    # 新增字段：支持表关联
+    table_ids: Optional[List[int]] = Field(default=[], sa_column=Column(JSONB))
+
 
 class DataTrainingInfo(BaseModel):
     id: Optional[int] = None
@@ -32,6 +36,10 @@ class DataTrainingInfo(BaseModel):
     advanced_application: Optional[int] = None
     advanced_application_name: Optional[str] = None
 
+    # 新增字段
+    table_ids: Optional[List[int]] = []
+    table_names: Optional[List[str]] = []  # 用于前端显示
+
 
 class DataTrainingInfoResult(BaseModel):
     id: Optional[str] = None
@@ -44,3 +52,7 @@ class DataTrainingInfoResult(BaseModel):
     enabled: Optional[bool] = True
     advanced_application: Optional[str] = None
     advanced_application_name: Optional[str] = None
+
+    # 新增字段
+    table_ids: Optional[List[int]] = []
+    table_names: Optional[List[str]] = []

@@ -165,6 +165,7 @@ import { useUserStore } from '@/stores/user'
 import ds from '@/assets/svg/ds.svg'
 import dashboard from '@/assets/svg/dashboard.svg'
 import chat from '@/assets/svg/chat.svg'
+import dimension from '@/assets/svg/dimension.svg'
 import iconsetting from '@/assets/svg/setting.svg'
 import iconsystem from '@/assets/svg/system.svg'
 import icon_user from '@/assets/svg/icon_user.svg'
@@ -225,6 +226,7 @@ const resolveIcon = (iconName: any) => {
     ds: ds,
     dashboard: dashboard,
     chat: chat,
+    dimension: dimension,
     setting: iconsetting,
     icon_user: icon_user,
     icon_ai: icon_ai,

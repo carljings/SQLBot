@@ -68,6 +68,14 @@
                     </div>
                   </template>
                 </el-table-column>
+                <el-table-column :label="t('dimension.dimension_management')" width="150">
+                  <template #default="scope">
+                    <el-tag v-if="scope.row.dimension_name" type="success" size="small">
+                      {{ scope.row.dimension_name }}
+                    </el-tag>
+                    <span v-else style="color: #ccc;">-</span>
+                  </template>
+                </el-table-column>
                 <el-table-column :label="t('ds.field.status')" width="180">
                   <template #default="scope">
                     <div style="display: flex; align-items: center">
@@ -122,7 +130,29 @@
       @closed="closeField"
     >
       <div>{{ t('ds.edit.field_comment_label') }}</div>
-      <el-input v-model="fieldComment" clearable :rows="3" type="textarea" />
+      <el-input v-model="fieldComment" clearable :rows="3" type="textarea" style="margin-bottom: 20px;" />
+
+      <div>{{ t('dimension.select_dimension') }}</div>
+      <el-select
+        v-model="selectedDimensionId"
+        :placeholder="t('dimension.no_dimension')"
+        clearable
+        filterable
+        style="width: 100%"
+      >
+        <el-option
+          v-for="dim in dimensionList"
+          :key="dim.id"
+          :label="dim.name"
+          :value="dim.id"
+        >
+          <div style="display: flex; justify-content: space-between;">
+            <span>{{ dim.name }}</span>
+            <span style="color: #ccc; font-size: 12px;">{{ dim.code }}</span>
+          </div>
+        </el-option>
+      </el-select>
+
       <div style="display: flex; justify-content: flex-end; margin-top: 20px">
         <el-button secondary @click="closeField">{{ t('common.cancel') }}</el-button>
         <el-button type="primary" @click="saveField">{{ t('common.confirm') }}</el-button>
@@ -136,6 +166,7 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { datasourceApi } from '@/api/datasource'
+import { dimensionApi } from '@/api/dimension'
 import { onMounted } from 'vue'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import type { TabsPaneContext } from 'element-plus-secondary'
@@ -158,6 +189,8 @@ const currentTable = ref<any>({})
 const currentField = ref<any>({})
 const fieldList = ref<any>([])
 const previewData = ref<any>({})
+const dimensionList = ref<any[]>([])
+const selectedDimensionId = ref<number | null>(null)
 
 const activeName = ref('schema')
 const tableDialog = ref<boolean>(false)
@@ -209,6 +242,7 @@ const saveTable = () => {
 const editField = (row: any) => {
   currentField.value = row
   fieldComment.value = currentField.value.custom_comment
+  selectedDimensionId.value = row.dimension_id || null
   fieldDialog.value = true
 }
 
@@ -226,12 +260,18 @@ const changeStatus = (row: any) => {
 
 const closeField = () => {
   fieldDialog.value = false
+  selectedDimensionId.value = null
 }
 
 const saveField = () => {
   currentField.value.custom_comment = fieldComment.value
+  currentField.value.dimension_id = selectedDimensionId.value
   datasourceApi.saveField(currentField.value).then(() => {
     closeField()
+    // 刷新字段列表以更新维度值名称显示
+    datasourceApi.fieldList(currentTable.value.id).then((res) => {
+      fieldList.value = res
+    })
     ElMessage({
       message: t('common.save_success'),
       type: 'success',
@@ -266,6 +306,15 @@ const refresh = () => {
   init()
 }
 
+const loadDimensions = () => {
+  // 获取所有维度值列表
+  dimensionApi.all(true).then((res: any) => {
+    dimensionList.value = res || []
+  }).catch(() => {
+    dimensionList.value = []
+  })
+}
+
 const init = () => {
   dsId.value = props.dsId
   datasourceApi.getDs(dsId.value).then((res) => {
@@ -275,6 +324,7 @@ const init = () => {
       tableList.value = res
     })
   })
+  loadDimensions()
 }
 
 onMounted(() => {

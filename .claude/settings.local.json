@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where:*)",
+      "Bash(D:\\\\soft\\\\python\\\\python.exe:*)",
+      "Bash(powershell -Command \"irm https://astral.sh/uv/install.ps1 | iex\")",
+      "Bash(/c/Users/Laptop/.local/bin/uv sync:*)",
+      "Bash(.venv/Scripts/python.exe:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(powershell:*)",
+      "Bash(cmd:*)",
+      "Bash(curl:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(.venvScriptsalembic upgrade head)",
+      "Bash(.venv/Scripts/alembic:*)",
+      "Bash(.venv/Scripts/python:*)",
+      "Bash(timeout:*)",
+      "Bash(python:*)",
+      "Bash(uv run python:*)",
+      "Bash(psql:*)",
+      "Bash(dir:*)",
+      "Bash(sqlite3:*)",
+      "Bash(uv run:*)",
+      "Bash(start \"SQLBot Backend\" cmd /c \".venv\\\\Scripts\\\\python.exe -m uvicorn main:app --reload --host 0.0.0.0 --port 8000\")",
+      "Bash(start \"SQLBot Frontend\" cmd /c \"npm run dev\")",
+      "Bash(.venvScriptspython.exe:*)",
+      "Bash(taskkill:*)",
+      "Bash(start \"SQLBot Backend NEW\" cmd /c \".venv\\\\Scripts\\\\python.exe -m uvicorn main:app --reload --host 0.0.0.0 --port 8001\")",
+      "Bash(start \"SQLBot Backend Clean\" cmd /k \".venv\\\\Scripts\\\\python.exe -m uvicorn main:app --reload --host 0.0.0.0 --port 8002\")",
+      "Bash(start-dev.bat:*)",
+      "Bash(git pull:*)",
+      "Bash(alembic upgrade:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)"
+    ]
+  }
+}

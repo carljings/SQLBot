@@ -5,7 +5,8 @@
     "Data Connections": "Data Sources",
     "Dashboard": "Dashboard",
     "AI Model Configuration": "AI Model Config",
-    "Details": "Details"
+    "Details": "Details",
+    "dimension.dimension_management": "Dimension Values"
   },
   "variables": {
     "built_in": "Built-in",
@@ -932,5 +933,33 @@
     "create": "Create",
     "to_doc": "View API",
     "trigger_limit": "Supports up to {0} API Keys"
+  },
+  "dimension": {
+    "dimension_management": "Dimension Value Management",
+    "add_dimension": "Add Dimension Value",
+    "edit_dimension": "Edit Dimension Value",
+    "dimension_name": "Dimension Name",
+    "dimension_code": "Dimension Code",
+    "description": "Description",
+    "values": "Dimension Values",
+    "value_count": "Value Count",
+    "value": "Value",
+    "add_value": "Add Value",
+    "remove": "Remove",
+    "name_required": "Please enter dimension name",
+    "code_required": "Please enter dimension code",
+    "code_hint": "English identifier for internal system use, camelCase recommended",
+    "name_placeholder": "e.g., Order Status",
+    "code_placeholder": "e.g., orderStatus",
+    "description_placeholder": "e.g., Various states of an order",
+    "values_required": "Please add at least one dimension value",
+    "delete_confirm": "Are you sure to delete this dimension value?",
+    "search_placeholder": "Search dimension name or code",
+    "empty_description": "No dimension values yet, click the button above to add",
+    "select_dimension": "Select Dimension Value",
+    "no_dimension": "No Dimension Value",
+    "dimension_linked": "Dimension Value Linked",
+    "link_dimension": "Link Dimension Value",
+    "unlink_dimension": "Unlink Dimension Value"
   }
 }

@@ -21,6 +21,8 @@ import set from '@/assets/svg/menu/icon_setting_filled.svg'
 import noSet from '@/assets/svg/menu/icon-setting.svg'
 import log from '@/assets/svg/menu/icon_log_filled.svg'
 import noLog from '@/assets/svg/menu/icon_log_outlined.svg'
+import dimension from '@/assets/svg/menu/icon_dimension_filled.svg'
+import noDimension from '@/assets/svg/menu/icon_dimension_outlined.svg'
 
 const iconMap = {
   chat,
@@ -41,6 +43,8 @@ const iconMap = {
   noEmbedded,
   log,
   noLog,
+  dimension,
+  noDimension,
 } as { [key: string]: any }
 
 const MenuItem = defineComponent({

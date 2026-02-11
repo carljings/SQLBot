@@ -58,6 +58,7 @@ class CoreField(SQLModel, table=True):
     field_comment: str = Field(sa_column=Column(Text))
     custom_comment: str = Field(sa_column=Column(Text))
     field_index: int = Field(sa_column=Column(BigInteger()))
+    dimension_id: Optional[int] = Field(sa_column=Column(BigInteger(), nullable=True), default=None, description="关联的维度值ID")
 
 
 # datasource create obj

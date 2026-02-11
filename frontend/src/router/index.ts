@@ -20,6 +20,7 @@ import EmbeddedPage from '@/views/embedded/page.vue'
 import EmbeddedCommon from '@/views/embedded/common.vue'
 import Member from '@/views/system/member/index.vue'
 import Professional from '@/views/system/professional/index.vue'
+import Dimension from '@/views/system/dimension/index.vue'
 import Training from '@/views/system/training/index.vue'
 import Prompt from '@/views/system/prompt/index.vue'
 import Audit from '@/views/system/audit/index.vue'
@@ -99,6 +100,19 @@ export const routes = [
           iconActive: 'dashboard',
           iconDeActive: 'noDashboard',
         },
+      },
+    ],
+  },
+  {
+    path: '/dimension',
+    component: LayoutDsl,
+    redirect: '/dimension/index',
+    children: [
+      {
+        path: 'index',
+        name: 'dimension',
+        component: Dimension,
+        meta: { title: t('dimension.dimension_management'), iconActive: 'dimension', iconDeActive: 'noDimension' },
       },
     ],
   },
