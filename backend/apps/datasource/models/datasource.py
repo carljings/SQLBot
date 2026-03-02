@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Any
 
 from pydantic import BaseModel
 from sqlalchemy import Column, Text, BigInteger, DateTime, Identity
@@ -59,6 +59,8 @@ class CoreField(SQLModel, table=True):
     custom_comment: str = Field(sa_column=Column(Text))
     field_index: int = Field(sa_column=Column(BigInteger()))
     dimension_id: Optional[int] = Field(sa_column=Column(BigInteger(), nullable=True), default=None, description="关联的维度值ID")
+
+    # 注意：dimension 字段在运行时动态添加，不存储到数据库
 
 
 # datasource create obj

@@ -114,13 +114,6 @@ const search = async () => {
   }
 }
 
-// 重置搜索
-const resetSearch = () => {
-  keywords.value = ''
-  pageInfo.currentPage = 1
-  search()
-}
-
 // 分页变化
 const handlePageChange = (page: number) => {
   pageInfo.currentPage = page

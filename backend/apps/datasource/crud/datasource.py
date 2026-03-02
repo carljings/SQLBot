@@ -418,9 +418,10 @@ def get_table_obj_by_ds(session: SessionDep, current_user: CurrentUser, ds: Core
         for dim in dimension_records:
             dimensions[dim.id] = dim
 
-    # 为每个字段附加维度值信息
+    # 为每个字段附加维度值信息（使用 object.__setattr__ 避免 SQLModel 严格模式限制）
     for field in all_fields:
-        field.dimension = dimensions.get(field.dimension_id) if field.dimension_id else None
+        if field.dimension_id:
+            object.__setattr__(field, 'dimension', dimensions.get(field.dimension_id))
 
     # build dict
     fields_dict = {}
