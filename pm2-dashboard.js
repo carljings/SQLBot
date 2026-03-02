@@ -171,6 +171,11 @@ const HTML = `<!DOCTYPE html>
   .btn:hover { border-color: var(--tab-active); color: var(--tab-active); }
   .btn.danger:hover { border-color: #ef4444; color: #ef4444; background: #fef2f2; }
   [data-theme="dark"] .btn.danger:hover { background: #7f1d1d; }
+  a.btn-link { text-decoration: none; display: inline-flex; align-items: center;
+               background: #2563eb; border-color: #2563eb; color: #fff !important; }
+  a.btn-link:hover { background: #1d4ed8; border-color: #1d4ed8; color: #fff !important; }
+  [data-theme="dark"] a.btn-link { background: #3b82f6; border-color: #3b82f6; }
+  [data-theme="dark"] a.btn-link:hover { background: #2563eb; border-color: #2563eb; }
 
   .logs-section { background: var(--bg-card); border: 1px solid var(--border);
                   border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
@@ -222,6 +227,14 @@ const HTML = `<!DOCTYPE html>
 <script>
 let activeTab = null
 let autoScroll = true
+
+// 各服务对应的 Web 地址（按需修改端口）
+const SERVICE_URLS = {
+  backend:   null,         // backend 无需直接访问
+  frontend:  'http://localhost:5173',
+  'g2-ssr':  null,        // g2-ssr 无需直接访问
+  dashboard: 'http://localhost:9615',
+}
 
 function statusColor(s) {
   if (s === 'online') return 'green'
@@ -278,6 +291,7 @@ async function refresh() {
         <button class="btn" onclick="action('\${p.name}','restart')">重启</button>
         <button class="btn" onclick="action('\${p.name}','stop')">停止</button>
         <button class="btn" onclick="showLog('\${p.name}')">查看日志</button>
+        \${p.name === 'frontend' ? \`<a class="btn btn-link" href="http://localhost:5173" target="_blank">打开系统 ↗</a>\` : ''}
       </div>
     </div>
   \`).join('')
