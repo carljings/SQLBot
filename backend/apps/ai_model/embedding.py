@@ -1,14 +1,17 @@
+import os
 import os.path
 import threading
 from typing import Optional
+
+# 必须在 huggingface_hub 导入前设置，防止其在 constants.py 中将值缓存为 False
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
 
 from langchain_core.embeddings import Embeddings
 from langchain_huggingface import HuggingFaceEmbeddings
 from pydantic import BaseModel
 
 from common.core.config import settings
-
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 class EmbeddingModelInfo(BaseModel):

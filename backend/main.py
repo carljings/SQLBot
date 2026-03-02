@@ -1,4 +1,9 @@
 import os
+
+# 必须在 huggingface_hub 被导入前设置，避免其缓存为 False
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
+os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+
 from typing import Dict, Any
 
 import sqlbot_xpack
