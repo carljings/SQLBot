@@ -7,6 +7,9 @@ import IconOpeDelete from '@/assets/svg/icon_delete.svg'
 import icon_searchOutline_outlined from '@/assets/svg/icon_search-outline_outlined.svg'
 import EmptyBackground from '@/views/dashboard/common/EmptyBackground.vue'
 import { useI18n } from 'vue-i18n'
+import field_text from '@/assets/svg/field_text.svg'
+import field_time from '@/assets/svg/field_time.svg'
+import field_value from '@/assets/svg/field_value.svg'
 import { cloneDeep } from 'lodash-es'
 
 interface Form {
@@ -21,6 +24,11 @@ const multipleSelectionAll = ref<any[]>([])
 const keywords = ref('')
 const oldKeywords = ref('')
 const searchLoading = ref(false)
+const iconMap = {
+  text: field_text,
+  number: field_value,
+  datetime: field_time,
+}
 
 const selectable = (row: any) => {
   return ![1, 2, 3].includes(row.id)
@@ -224,6 +232,11 @@ const saveHandler = () => {
       if (obj.id === '' || obj.id === null) {
         delete obj.id
       }
+
+      if (obj.var_type === 'text') {
+        obj.value = [...new Set(obj.value)]
+      }
+
       variablesApi.save(obj).then(() => {
         ElMessage({
           type: 'success',
@@ -244,7 +257,7 @@ const editHandler = (row: any) => {
     pageForm.value.id = id
     pageForm.value.name = name
     pageForm.value.var_type = var_type
-    pageForm.value.value = value
+    pageForm.value.value = cloneDeep(value)
   }
   dialogTitle.value = row?.id ? t('variables.edit_variable') : t('variables.add_variable')
   dialogFormVisible.value = true
@@ -297,7 +310,7 @@ const handleCurrentChange = (val: number) => {
     <div
       v-if="!searchLoading"
       class="table-content"
-      :class="multipleSelectionAll.length && 'show-pagination_height'"
+      :class="multipleSelectionAll.length ? 'show-pagination_height' : ''"
     >
       <template v-if="!oldKeywords && !fieldList.length">
         <EmptyBackground
@@ -317,7 +330,30 @@ const handleCurrentChange = (val: number) => {
           <el-table-column prop="name" :label="$t('variables.variable_name')">
             <template #default="scope">
               <div style="display: flex; align-items: center" :title="scope.row.name">
-                <div class="ellipsis" style="max-width: calc(100% - 60px); width: fit-content">
+                <div
+                  class="ellipsis"
+                  style="
+                    max-width: calc(100% - 60px);
+                    width: fit-content;
+                    position: relative;
+                    padding-left: 20px;
+                  "
+                >
+                  <el-icon
+                    :class="`${scope.row.var_type}-variables`"
+                    size="16"
+                    style="
+                      margin-right: 4px;
+                      position: absolute;
+                      left: 0;
+                      top: 50%;
+                      transform: translateY(-50%);
+                    "
+                  >
+                    <component
+                      :is="iconMap[scope.row.var_type as keyof typeof iconMap]"
+                    ></component>
+                  </el-icon>
                   {{ scope.row.name }}
                 </div>
                 <div v-if="scope.row.type === 'system'" class="system-flag">
@@ -453,9 +489,9 @@ const handleCurrentChange = (val: number) => {
       </el-form-item>
       <el-form-item :label="t('variables.variable_type')">
         <el-radio-group
+          v-model="pageForm.var_type"
           :disabled="!!pageForm.id"
           @change="varTypeChange"
-          v-model="pageForm.var_type"
         >
           <el-radio value="text">{{ $t('model.text') }}</el-radio>
           <el-radio value="number">
@@ -481,8 +517,8 @@ const handleCurrentChange = (val: number) => {
         </template>
         <div class="value-list">
           <el-form-item
-            :key="index"
             v-for="(_, index) in pageForm.value"
+            :key="index"
             :prop="'value.' + index"
             :rules="{
               required: true,
@@ -510,23 +546,21 @@ const handleCurrentChange = (val: number) => {
           </el-form-item>
         </div>
       </el-form-item>
-      <el-form-item prop="value" v-else :label="t('variables.variable_value')">
+      <el-form-item v-else prop="value" :label="t('variables.variable_value')">
         <div class="value-number_date">
           <template v-if="pageForm.var_type === 'number'">
-            <el-input
+            <el-input-number
               v-model.number="pageForm.value[0]"
               :placeholder="$t('variables.please_enter_value')"
-              autocomplete="off"
-              maxlength="50"
               clearable
+              controls-position="right"
             />
             <span class="ed-range-separator separator"></span>
-            <el-input
+            <el-input-number
               v-model.number="pageForm.value[1]"
               :placeholder="$t('variables.please_enter_value')"
-              autocomplete="off"
-              maxlength="50"
               clearable
+              controls-position="right"
             />
           </template>
           <template v-else>
@@ -626,8 +660,11 @@ const handleCurrentChange = (val: number) => {
         margin-left: 4px;
         color: var(--ed-color-primary-15-d, #189e7a);
       }
-      .ed-icon {
-        color: #646a73;
+
+      &:not(:has(.ellipsis)) {
+        .ed-icon {
+          color: #646a73;
+        }
       }
 
       .field-comment {
@@ -770,6 +807,11 @@ const handleCurrentChange = (val: number) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .ed-input-number {
+      width: 100%;
+    }
+
     .ed-range-separator::after {
       content: '';
       height: 1px;

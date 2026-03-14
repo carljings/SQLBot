@@ -381,7 +381,7 @@
             <span style="width: calc(48% - 2px)">{{ t('variables.variables') }}</span>
             <span>{{ t('variables.variable_value') }}</span>
           </div>
-          <div v-for="(_, index) in state.form.system_variables" class="item">
+          <div v-for="(_, index) in state.form.system_variables" :key="index" class="item">
             <el-select
               v-model="state.form.system_variables[index].variableId"
               style="width: 236px"
@@ -393,6 +393,18 @@
                 :label="item.name"
                 :value="item.id"
               >
+                <div style="width: 100%; display: flex; align-items: center">
+                  <el-icon
+                    :class="`${variableValueMap[item.id].var_type}-variables`"
+                    size="16"
+                    style="margin-right: 4px"
+                  >
+                    <component
+                      :is="iconMap[variableValueMap[item.id].var_type as keyof typeof iconMap]"
+                    ></component>
+                  </el-icon>
+                  {{ item.name }}
+                </div>
               </el-option>
             </el-select>
             <el-select
@@ -544,6 +556,9 @@ import logo_lark from '@/assets/img/lark.png'
 import logo_wechat_work from '@/assets/img/wechat.png'
 import icon_add_outlined from '@/assets/svg/icon_add_outlined.svg'
 import { userApi } from '@/api/user'
+import field_text from '@/assets/svg/field_text.svg'
+import field_time from '@/assets/svg/field_time.svg'
+import field_value from '@/assets/svg/field_value.svg'
 import { request } from '@/utils/request'
 import { workspaceList } from '@/api/workspace'
 import { variablesApi } from '@/api/variables'
@@ -566,6 +581,12 @@ const drawerMainRef = ref()
 const userImportRef = ref()
 const syncUserRef = ref()
 const selectionLoading = ref(false)
+
+const iconMap = {
+  text: field_text,
+  number: field_value,
+  datetime: field_time,
+}
 const filterOption = ref<any[]>([
   {
     type: 'enum',
@@ -863,29 +884,36 @@ const drawerMainClose = () => {
   drawerMainRef.value.close()
 }
 const editHandler = (row: any) => {
-  variablesApi.listAll().then((res: any) => {
-    variables.value = res.filter((ele: any) => ele.type === 'custom')
-    variableValueMap.value = variables.value.reduce((pre, next) => {
-      pre[next.id] = {
-        value: next.value,
-        var_type: next.var_type,
-        name: next.name,
-      }
-      return pre
-    }, {})
+  variablesApi
+    .listAll()
+    .then((res: any) => {
+      variables.value = res.filter((ele: any) => ele.type === 'custom')
+      variableValueMap.value = variables.value.reduce((pre, next) => {
+        pre[next.id] = {
+          value: next.value,
+          var_type: next.var_type,
+          name: next.name,
+        }
+        return pre
+      }, {})
 
-    if (row) {
-      state.form = {
-        ...row,
-        system_variables: (row.system_variables || []).map((ele: any) => ({
-          ...ele,
-          variableValue: ele.variableValues[0],
-        })),
+      if (row) {
+        state.form = {
+          ...row,
+          system_variables: (row.system_variables || []).map((ele: any) => ({
+            ...ele,
+            variableValue: ele.variableValues[0],
+          })),
+        }
       }
-    }
-  })
-  dialogFormVisible.value = true
-  dialogTitle.value = row?.id ? t('user.edit_user') : t('user.add_users')
+    })
+    .finally(() => {
+      state.form.system_variables = state.form.system_variables.filter((ele: any) => {
+        return !!variableValueMap.value[ele.variableId]
+      })
+      dialogTitle.value = row?.id ? t('user.edit_user') : t('user.add_users')
+      dialogFormVisible.value = true
+    })
 }
 
 const statusHandler = (row: any) => {

@@ -388,13 +388,14 @@
         "success": "连接成功",
         "failed": "连接失败"
       },
-      "timeout": "查询超时(秒)",
+      "timeout": "连接超时(秒)",
       "address": "地址",
       "low_version": "兼容低版本"
     },
     "sync_fields": "同步表结构"
   },
   "datasource": {
+    "recommended_question": "推荐问题",
     "recommended_repetitive_tips": "存在重复问题",
     "recommended_problem_tips": "自定义配置至少一个问题，每个问题2-200个字符",
     "recommended_problem_configuration": "推荐问题配置",

@@ -190,6 +190,15 @@ const editTable = () => {
   tableComment.value = currentTable.value.custom_comment
   tableDialog.value = true
 }
+const changeChecked = () => {
+  datasourceApi.saveTable(currentTable.value).then(() => {
+    ElMessage({
+      message: t('common.save_success'),
+      type: 'success',
+      showClose: true,
+    })
+  })
+}
 const saveTable = () => {
   currentTable.value.custom_comment = tableComment.value
   datasourceApi.saveTable(currentTable.value).then(() => {
@@ -364,7 +373,7 @@ const btnSelectClick = (val: any) => {
       </el-icon>
       <div class="name">{{ info.name }}</div>
       <div class="export-remark">
-        <el-button style="margin-right: 12px" @click="downloadTemplate" secondary>
+        <el-button style="margin-right: 12px" secondary @click="downloadTemplate">
           <template #icon>
             <icon_import_outlined></icon_import_outlined>
           </template>
@@ -387,7 +396,7 @@ const btnSelectClick = (val: any) => {
             :content="$t('ds.form.choose_tables')"
             placement="top"
           >
-            <el-button style="margin-right: -4px" @click="handleSelectTableList" text>
+            <el-button style="margin-right: -4px" text @click="handleSelectTableList">
               <el-icon size="18">
                 <icon_form_outlined></icon_form_outlined>
               </el-icon>
@@ -473,7 +482,27 @@ const btnSelectClick = (val: any) => {
         class="info-table"
       >
         <div class="table-name">
-          <div class="name">{{ currentTable.table_name }}</div>
+          <div class="name">
+            {{ currentTable.table_name }}
+            <div
+              style="
+                display: inline-flex;
+                align-items: center;
+                margin-left: 30px;
+                font-size: 14px;
+                font-weight: 400;
+              "
+            >
+              <el-switch
+                v-model="currentTable.checked"
+                @change="changeChecked"
+                size="small"
+                style="margin-right: 8px"
+              />
+
+              {{ currentTable.checked ? t('user.disable') : t('user.enable') }}
+            </div>
+          </div>
           <div class="notes">
             {{ $t('about.remark') }}:
             <span :title="currentTable.custom_comment" class="field-notes">{{
