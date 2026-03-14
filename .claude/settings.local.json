@@ -133,7 +133,32 @@
       "Bash(docker exec sqlbot-postgres psql -U root -d sqlbot -c \"CREATE EXTENSION IF NOT EXISTS vector;\")",
       "Bash(docker exec sqlbot-postgres psql -U root -d sqlbot -c \":*)",
       "Bash(docker ps --format \"table {{.Names}}\\\\t{{.Status}}\\\\t{{.Ports}}\")",
-      "Bash(docker restart sqlbot-postgres)"
+      "Bash(docker restart sqlbot-postgres)",
+      "Bash(pm2 --version)",
+      "Bash(ls /Users/guchuan/codespace/SQLBot-ClaudeCode/ecosystem.config.*)",
+      "Bash(node -e \"const p=require\\(''child_process''\\);p.exec\\(''npm list -g concurrently 2>/dev/null || echo not found'', \\(e,o\\)=>console.log\\(o\\)\\)\")",
+      "Bash(pm2 start ecosystem.config.cjs)",
+      "Bash(pm2 status)",
+      "Bash(pm2 logs backend --lines 30 --nostream)",
+      "Bash(pm2 logs g2-ssr --lines 20 --nostream)",
+      "Bash(lsof -ti:8000 -ti:3000)",
+      "Bash(pm2 restart all)",
+      "Bash(pm2 logs --lines 15 --nostream)",
+      "Bash(pm2-gui --help)",
+      "Bash(pm2-gui start)",
+      "Bash(pm2 web)",
+      "Bash(pm2 restart dashboard)",
+      "Bash(lsof -i :8000 -i :5173 -i :3000 -i :9615)",
+      "Bash(pm2 list)",
+      "Bash(pm2 start ecosystem.config.cjs --only dashboard)",
+      "Bash(pm2 logs dashboard --lines 5 --nostream)",
+      "Bash(lsof -ti:9615)",
+      "Bash(lsof -ti:8000 -ti:3000 -ti:9615 -ti:5173 -ti:5174)",
+      "Bash(pm2 logs backend --lines 15 --nostream)",
+      "Bash(docker start sqlbot-postgres)",
+      "Bash(pm2 restart backend)",
+      "Bash(pm2 logs backend --lines 10 --nostream)",
+      "Bash(open /Users/guchuan/codespace/SQLBot-ClaudeCode/docs/tech-stack-diagram.html)"
     ]
   }
 }
